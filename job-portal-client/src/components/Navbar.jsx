@@ -25,7 +25,7 @@ const Navbar = () => {
                         <circle cx='12.0143' cy='12.5143' r='12.0143' fill='#3575E2' fillOpacity='0.4'></circle>
                         <circle cx='16.9857' cy='17.4857' r='12.0143' fill='#3575E2' ></circle>
                     </svg>
-                    <span>JobPortal</span>
+                    <span>Job Board</span>
                 </a>
                 {/*navbar items-*/}
                 <ul className='hidden md:flex gap-12'>
