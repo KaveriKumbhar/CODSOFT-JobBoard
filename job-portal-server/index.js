@@ -13,9 +13,9 @@ console.log(process.env.DB_PASSWORD);
 app.use(express.json());
 app.use(cors());
 
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const uri =
-  "mongodb+srv://SairajDB0:sai0401@cluster0.rzle0q1.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+  `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@job-portal.ykuhecq.mongodb.net/?appName=job-portal`;
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
@@ -30,6 +30,23 @@ async function run() {
 
     const db = client.db("job-portal");
     const jobCollections = db.collection("demoJobs");
+
+    //post a job
+    app.post("/post-job", async(req,res)=>{
+      const body = req.body;
+      body.createAt = new Date();
+
+      const result = await jobCollections.insertOne(body);
+
+      if(result.insertedId){
+        return res.status(200).send(result);
+      }else{
+        return res.status(404).send({
+          message : "Can not insert ! Please try again",
+          status : false
+        })
+      }
+    })
 
     //get all jobs
     app.get("/all-jobs", async (req, res) => {
@@ -92,6 +109,10 @@ run().catch(console.dir);
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
+
+// app.get("/login",(req,res)=>{
+//   return res.render("Login");
+// })
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
